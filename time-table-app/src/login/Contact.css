@@ -1,24 +1,39 @@
-.flex {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-  }
-  .icon{
-    margin-top: 20px;
-  }
-  h2 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
-  h3 {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  p {
-    margin: 5px 0;
-  }
-  
+.contact-container {
+  text-align: center;
+  margin: 2rem;
+}
+
+.contact-heading {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.contact-flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.contact-info, .social-media {
+  flex: 1;
+  padding: 1rem;
+}
+
+.social-media {
+  background-color: white;
+}
+
+.icon-flex {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.icon-flex a {
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.icon-flex a:hover {
+  color: #007bff;
+}

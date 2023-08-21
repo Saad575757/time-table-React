@@ -69,27 +69,44 @@ const Classroom = () => {
     
   }, []);
 
+
   const handleClick = () => {
     setShowForm(!showForm);
   };
 
-  const handleFormSubmit = (
+  const handleFormSubmit = async (
     departmentName,
     classroomno,
     courseCode,
     courseType,
     teacherName
   ) => {
-    const newTeacher = {
-      departmentName: departmentName,
-      classroomno: classroomno,
-      courseCode: courseCode,
-      courseType: courseType,
-      teacherName: teacherName,
+    const newAllotment = {
+      department_name: departmentName,
+      classroom_number: classroomno,
+      course_code: courseCode,
+      course_type: courseType,
+      teacher_name: teacherName,
     };
-    setTeachers([...teachers, newTeacher]);
-    setShowForm(false);
+    try {
+      // Make a POST request to store the allotment data
+      const response = await axios.post('http://localhost:1337/api/allotment-classrooms', {
+        data: newAllotment,
+      });
+      console.log(response.data);
+
+      // Update the state with the new allotment information
+      setTeachers([...teachers, newAllotment]);
+      setShowForm(false);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      console.error('Response:', error.response); // Log the response for more details
+    }
   };
+  
+    // setTeachers([...teachers, newTeacher]);
+    // setShowForm(false);
+  
 
   return (
     <>
@@ -271,3 +288,4 @@ function FormComponent({ onClose, onFormSubmit, courseCodes, courseTypes, course
 }
 
 export default Classroom;
+

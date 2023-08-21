@@ -12,45 +12,64 @@ const Theory = () => {
   const [facultyNumbers, setFacultyNumbers] = useState([]);
 
   useEffect(() => {
-    // Fetch course codes from the API when the component mounts
-    axios
-      .get('http://localhost:1337/api/addcourses')
-      .then((response) => {
-        const courseCodesFromAPI = response.data.data.map((item) => item.attributes.course_code);
-        const courseNamesFromAPI = response.data.data.map((item) => item.attributes.course_name);
-        setCourseNames(courseNamesFromAPI);
-        setCourseCodes(courseCodesFromAPI);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-      axios
-      .get('http://localhost:1337/api/addteachers')
-      .then((response) => {
-        const facultyNamesFromAPI = response.data.data.map((item) => item.attributes.faculty_name);
-        const facultyNumbersFromAPI = response.data.data.map((item) => item.attributes.faculty_number);
-        setFacultyNames(facultyNamesFromAPI);
-        setFacultyNumbers(facultyNumbersFromAPI);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    
+    fetchCourseData();
+    fetchFacultyData();
   }, []);
+
+  const fetchCourseData = async () => {
+    try {
+      const response = await axios.get('http://localhost:1337/api/addcourses');
+      const courseData = response.data.data;
+      const courseCodesFromAPI = courseData.map(item => item.attributes.course_code);
+      const courseNamesFromAPI = courseData.map(item => item.attributes.course_name);
+      setCourseCodes(courseCodesFromAPI);
+      setCourseNames(courseNamesFromAPI);
+    } catch (error) {
+      console.error('Error fetching course data:', error);
+    }
+  };
+
+  const fetchFacultyData = async () => {
+    try {
+      const response = await axios.get('http://localhost:1337/api/addteachers');
+      const facultyData = response.data.data;
+      const facultyNamesFromAPI = facultyData.map(item => item.attributes.faculty_name);
+      const facultyNumbersFromAPI = facultyData.map(item => item.attributes.faculty_number);
+      setFacultyNames(facultyNamesFromAPI);
+      setFacultyNumbers(facultyNumbersFromAPI);
+    } catch (error) {
+      console.error('Error fetching faculty data:', error);
+    }
+  };
 
   const handleClick = () => {
     setShowForm(!showForm);
   };
 
-  const handleFormSubmit = (courseCode, courseName, facultyNo, facultyName) => {
-    const newTeacher = {
-      courseCode: courseCode,
-      courseName: courseName,
-      facultyNo: facultyNo,
-      facultyName: facultyName,
+  const handleFormSubmit = async (courseName, facultyNo, courseCode, facultyName) => {
+    const newAllotment = {
+      course_name: courseName,
+      faculty_number: facultyNo,
+      course_code: courseCode,
+      faculty_name: facultyName,
     };
-    setTeachers([...teachers, newTeacher]);
-    setShowForm(false);
+
+    try {
+      const response = await axios.post('http://localhost:1337/api/allotment-theories', {
+        data: newAllotment,
+      });
+
+      console.log(response.data); // Log the response data
+
+      // Update the state with the new allotment information
+      setTeachers([...teachers, newAllotment]);
+      setShowForm(false);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      if (error.response) {
+        console.error('Response:', error.response.data); // Log the response data for more details
+      }
+    }
   };
 
   return (
@@ -58,7 +77,7 @@ const Theory = () => {
       <Header />
 
       <div>
-        <button onClick={handleClick} className="button">
+        <button onClick={handleClick} className="button allot">
           Allot
         </button>
 
@@ -93,10 +112,10 @@ const Theory = () => {
               <tbody>
                 {teachers.map((teacher, index) => (
                   <tr key={index}>
-                    <td>{teacher.courseCode}</td>
-                    <td>{teacher.courseName}</td>
-                    <td>{teacher.facultyNo}</td>
-                    <td>{teacher.facultyName}</td>
+                    <td>{teacher.course_code}</td>
+                    <td>{teacher.course_name}</td>
+                    <td>{teacher.faculty_number}</td>
+                    <td>{teacher.faculty_name}</td>
                   </tr>
                 ))}
               </tbody>
@@ -108,7 +127,7 @@ const Theory = () => {
   );
 };
 
-function FormComponent({ onClose, onFormSubmit, courseCodes,courseNames,facultyNames, facultyNumbers }) {
+function FormComponent({ onClose, onFormSubmit, courseCodes, courseNames, facultyNames, facultyNumbers }) {
   const [courseCode, setCourseCode] = useState('');
   const [courseName, setCourseName] = useState('');
   const [facultyNo, setFacultyNo] = useState('');
@@ -116,7 +135,7 @@ function FormComponent({ onClose, onFormSubmit, courseCodes,courseNames,facultyN
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onFormSubmit(courseCode, courseName, facultyNo, facultyName);
+    onFormSubmit(courseName, facultyNo, courseCode, facultyName);
   };
 
   return (
@@ -140,6 +159,8 @@ function FormComponent({ onClose, onFormSubmit, courseCodes,courseNames,facultyN
             </option>
           ))}
         </select>
+      </div>
+      <div className="form-group">
         <label htmlFor="courseName">Course Name</label>
         <select
           id="courseName"
@@ -149,27 +170,14 @@ function FormComponent({ onClose, onFormSubmit, courseCodes,courseNames,facultyN
           required
         >
           <option value="">Select Course Name</option>
-          {courseNames.map((code) => (
-            <option key={code} value={code}>
-              {code}
+          {courseNames.map((name) => (
+            <option key={name} value={name}>
+              {name}
             </option>
           ))}
         </select>
-        <label htmlFor="facultyName">Faculty Name</label>
-        <select
-          id="facultyName"
-          value={facultyName}
-          onChange={(e) => setFacultyName(e.target.value)}
-          className="select-style"
-          required
-        >
-          <option value="">Select Faculty Name</option>
-          {facultyNames.map((code) => (
-            <option key={code} value={code}>
-              {code}
-            </option>
-          ))}
-        </select>
+      </div>
+      <div className="form-group">
         <label htmlFor="facultyNo">Faculty Number</label>
         <select
           id="facultyNo"
@@ -179,18 +187,34 @@ function FormComponent({ onClose, onFormSubmit, courseCodes,courseNames,facultyN
           required
         >
           <option value="">Select Faculty Number</option>
-          {facultyNumbers.map((code) => (
-            <option key={code} value={code}>
-              {code}
+          {facultyNumbers.map((number) => (
+            <option key={number} value={number}>
+              {number}
             </option>
           ))}
         </select>
-        <div className="form-group">
+      </div>
+      <div className="form-group">
+        <label htmlFor="facultyName">Faculty Name</label>
+        <select
+          id="facultyName"
+          value={facultyName}
+          onChange={(e) => setFacultyName(e.target.value)}
+          className="select-style"
+          required
+        >
+          <option value="">Select Faculty Name</option>
+          {facultyNames.map((name) => (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="form-group">
         <button type="submit" className="submit-button">
           Submit
         </button>
-      </div>
-   
       </div>
     </form>
   );

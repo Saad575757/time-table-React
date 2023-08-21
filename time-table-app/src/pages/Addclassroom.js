@@ -15,13 +15,15 @@ const Addclassroom = () => {
   const handleFormSubmit = (
     classroomNumber,
     classroomType,
-    departmentName
+    departmentName,
+    capacity
   ) => {
     // Create a new department object
     const newDepartment = {
       classroomNumber: classroomNumber,
       classroomType: classroomType,
-      departmentName: departmentName
+      departmentName: departmentName,
+      capacity:capacity
     };
     // Add the new department to the departments array
     setDepartments([...departments, newDepartment]);
@@ -34,8 +36,8 @@ const Addclassroom = () => {
       <Header />
       <File />
       <div>
-        <button onClick={handleClick} className="button">
-          Open Form
+        <button onClick={handleClick} className="button addDep">
+          Add Classroom
         </button>
 
         {showForm && (
@@ -56,6 +58,7 @@ const Addclassroom = () => {
                 <tr>
                   <th>Classroom Number</th>
                   <th>Classroom Type</th>
+                  <th>Capacity</th>
                   <th>Department Name</th>
                 </tr>
               </thead>
@@ -64,6 +67,7 @@ const Addclassroom = () => {
                   <tr key={index}>
                     <td>{department.classroomNumber}</td>
                     <td>{department.classroomType}</td>
+                    <td>{department.capacity}</td>
                     <td>{department.departmentName}</td>
                   </tr>
                 ))}
@@ -79,6 +83,7 @@ const Addclassroom = () => {
 function FormComponent({ onClose, onFormSubmit }) {
   const [classroomNumber, setClassroomNumber] = useState('');
   const [classroomType, setClassroomType] = useState('');
+  const [capacity, setCapacity] = useState('');
   const [departmentName, setDepartmentName] = useState('');
 
   const handleSubmit = async (e) => {
@@ -88,6 +93,7 @@ function FormComponent({ onClose, onFormSubmit }) {
         data: {
           classroom_number:classroomNumber ,
           classroom_type: classroomType,
+          capacity: capacity,
           department_name: departmentName
         
         }
@@ -127,8 +133,17 @@ function FormComponent({ onClose, onFormSubmit }) {
         <option value="">Select Classroom Type</option>
           <option value="Theory class">Theory class</option>
           <option value="Lab class">Lab class</option>
-          <option value="Great class">Great class</option>
         </select>
+      </div>
+      <div className="form-group">
+        <label htmlFor="capacity">capacity</label>
+        <input
+          type="text"
+          id="capacity"
+          value={capacity}
+          onChange={(e) => setCapacity(e.target.value)}
+          required
+        />
       </div>
       <div className="form-group">
         <label htmlFor="departmentName">Department Name</label>

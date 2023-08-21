@@ -26,10 +26,10 @@ const Adddepartment = () => {
   return (
     <>
       <Header />
-      <File />
+      <File /> 
       <div>
-        <button onClick={handleClick} className="button">
-          Open Form
+        <button onClick={handleClick} className="button addDep">
+          Add Department
         </button>
 
         {showForm && (

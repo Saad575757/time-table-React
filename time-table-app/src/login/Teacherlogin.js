@@ -13,12 +13,42 @@ const Teacherlogin = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Perform login logic here, e.g., making an API call
-    console.log('Username:', username);
-    console.log('Password:', password);
+  
+    const apiUrl = 'http://localhost:1337/api/auth/local'; // Replace with the actual API URL
+  
+    const requestData = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        identifier: username, // Replace with your actual username value
+        password: password, // Replace with your actual password value
+      }),
+    };
+  
+    try {
+      const response = await fetch(apiUrl, requestData);
+      const data = await response.json();
+  
+      // Handle the response data here, e.g. check for success or failure
+      console.log('Response:', data);
+  
+      // You can perform further logic based on the response
+      if (response.ok) {
+        // Successful login, do something
+        window.location.href = '/teacherdashboard';
+
+      } else {
+        // Login failed, do something else
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
+  
   return (
     <div className="login-page">
     <div className="login-container">

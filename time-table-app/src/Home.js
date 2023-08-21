@@ -14,17 +14,16 @@ const Home = () => {
   return (
     <>
     <div class="header">
-        <h3 align="center">TIME TABLE MANAGEMENT SYSTEM, CS&IT (TIEST) DEPARTMENT</h3>
+        <h3 align="center">TIME TABLE MANAGEMENT SYSTEM</h3>
       
     </div>
     <Sliders />
     <Buttons />
-    <DropdownButton />
     <Faculty />
     <Contact />
     <div>
       <footer>
-      &copy 2023 @TIEST.com | All Rights Reserved |  <a href="http://shimputa.com" target="_blank">Design by : shimputa.com</a>
+      &copy 2023 @TIEST.com | All Rights Reserved | | Design by : FYP GROUP # 3
       </footer>
     </div>
     

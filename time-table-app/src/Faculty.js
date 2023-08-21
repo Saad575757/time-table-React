@@ -18,7 +18,7 @@ const images = [
       src: 'S._M-removebg-preview (2).png',
       alt: 'Image 3',
       name: 'Prof. Dr. Syed Abbas Ali',
-      description: 'Principal TIEST',
+      description: 'Chairman  CSIT TIEST',
     },
   ];
 const Faculty = () => {

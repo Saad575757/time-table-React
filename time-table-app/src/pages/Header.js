@@ -60,7 +60,7 @@ const Header = () => {
                         <NavLink to='/generate-table' className='navlink'>Generate table</NavLink>
                     </li>
                     <li>
-                    <NavLink to='/'  className='navlink'>Logout</NavLink>
+                    <NavLink to='/'  className='navlink logout1 '>Logout</NavLink>
             </li>
                 </ul>
             </div>

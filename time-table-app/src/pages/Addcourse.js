@@ -40,8 +40,8 @@ const Addcourse = () => {
       <Header />
       <File />
       <div>
-        <button onClick={handleClick} className="button">
-          Open Form
+        <button onClick={handleClick} className="button addDep">
+          Add course
         </button>
 
         {showForm && (

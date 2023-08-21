@@ -31,7 +31,7 @@ const Addteacher = () => {
         <Header />
         <File />
         <div>
-      <button onClick={handleClick} className="button">Open Form</button>
+      <button onClick={handleClick} className="button addDep"> Add Teachers</button>
 
       {showForm && (
         // Render the form as a popup with blurred background
